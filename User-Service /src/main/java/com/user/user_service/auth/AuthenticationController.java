@@ -6,12 +6,18 @@ import com.user.user_service.dtos.RegisterUserDto;
 import com.user.user_service.entity.User;
 import com.user.user_service.service.AuthenticationService;
 import com.user.user_service.service.JwtService;
+import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/auth")
 @RestController
@@ -25,10 +31,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
+    public ResponseEntity<?> register(@Valid  @RequestBody RegisterUserDto registerUserDto,BindingResult result) {
+        if (result.hasErrors())  {
+            List<String> errorMessages = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
 
-        return ResponseEntity.ok(registeredUser);
+        }
+        return ResponseEntity.ok(authenticationService.signup(registerUserDto));
     }
 
     @PostMapping("/login")

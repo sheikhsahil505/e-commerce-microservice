@@ -1,5 +1,6 @@
 package com.user.user_service.entity;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,16 +24,15 @@ public class User implements UserDetails {
     @Id
     private String id;
     private String fullName;
-    @Indexed(unique = true)
-    private String username;
     private String password;
     @Indexed(unique = true)
+    @NotNull
     private String email;
     private List<String> roles;
+    private List<Address> addresses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Assuming roles are stored as a List<String> in your User entity
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role))  // No "ROLE_" prefix here
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
