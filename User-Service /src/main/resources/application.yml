@@ -6,3 +6,10 @@ spring:
       uri: mongodb://localhost:27017/user-service
       database: user-service
       auto-index-creation: true
+server:
+  port: 8080
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8765/eureka
+    filter-only-up-instances: true

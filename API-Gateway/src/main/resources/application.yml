@@ -1,0 +1,5 @@
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8765/eureka
+    filter-only-up-instances: true

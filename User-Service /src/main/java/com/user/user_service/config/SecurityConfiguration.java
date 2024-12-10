@@ -40,11 +40,11 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> {
                     // Allow public access to authentication-related endpoints
-                    authorize.requestMatchers("/auth/**").permitAll();
+                    authorize.requestMatchers("/api/v1/user-service/auth/**").permitAll();
 
                     // Protect /users endpoint, allowing only users with ROLE_ADMIN
                     authorize.requestMatchers("/api/v1/user-service/admin/**").hasRole("ADMIN");
-
+                    authorize.requestMatchers("/api/v1/product-service/seller/**").hasRole("SELLER");
                     // For other endpoints, any authenticated user can access
 
                     authorize.anyRequest().authenticated();
