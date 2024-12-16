@@ -4,7 +4,7 @@ spring:
   datasource:
     url: ${DB_CONNECTION_URL:jdbc:mysql://localhost:3306/product_service_db}
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:Root@123}
+    password: ${DB_PASSWORD:Sql@4321}
   jpa:
     show-sql: false
     hibernate:
@@ -12,6 +12,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
 server:
   port: ${PORT:8081}
 eureka:

@@ -32,13 +32,25 @@ public class Category {
     @NotNull
     @NotBlank
     private String description;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> subCategories;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Product> products;
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", subCategories=" + subCategories +
+                '}';
+    }
 }

@@ -3,6 +3,7 @@ package com.ecomm.productservice.service;
 import com.ecomm.productservice.exception.exceptions.ErrorWhileCreatingException;
 import com.ecomm.productservice.exception.exceptions.ResourceNotFoundException;
 import com.ecomm.productservice.model.ProductAttributes;
+import com.ecomm.productservice.model.ProductStatus;
 import com.ecomm.productservice.repository.ProductAttributesRepository;
 import com.ecomm.productservice.utility.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -69,14 +70,28 @@ public class ProductAttributesService {
         if (productAttributes.getDiscount() != null) {
             existingProductAttributes.setDiscount(productAttributes.getDiscount());
         }
-        if (productAttributes.getProductStatus() != null) {
-            existingProductAttributes.setProductStatus(productAttributes.getProductStatus());
-        }
         if (productAttributes.getImageUrls() != null) {
             existingProductAttributes.setImageUrls(productAttributes.getImageUrls());
         }
         if (productAttributes.getOtherSpecificAttributes() != null) {
             existingProductAttributes.setOtherSpecificAttributes(productAttributes.getOtherSpecificAttributes());
+        }
+
+        return ApiResponse.<ProductAttributes>builder()
+                .status(HttpStatus.OK.value())
+                .message("success")
+                .data(productAttributesRepository.save(existingProductAttributes))
+                .build();
+    }
+
+    public ApiResponse<ProductAttributes> activateDeactivateProductAttributes(Long id) {
+        ProductAttributes existingProductAttributes = productAttributesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product attributes with id: " + id + " not found."));
+
+        if (existingProductAttributes.getProductStatus() != null && existingProductAttributes.getProductStatus() == ProductStatus.ACTIVE) {
+            existingProductAttributes.setProductStatus(ProductStatus.INACTIVE);
+        } else if (existingProductAttributes.getProductStatus() != null && existingProductAttributes.getProductStatus() == ProductStatus.INACTIVE) {
+            existingProductAttributes.setProductStatus(ProductStatus.ACTIVE);
         }
 
         return ApiResponse.<ProductAttributes>builder()
