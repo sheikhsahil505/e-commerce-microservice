@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package com.devproblems;
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+message ProductProto {
+  int64 id = 1;
+  string brand = 2;
+  string name = 3;
+  string created_at = 4;
+  string updated_at = 5;
+  repeated ProductAttributesProto product_attributes = 6;
+  repeated CategoriesProto categories = 7;
+  int64 seller_id = 8;
+}
+
+message ProductAttributesProto {
+  int64 id = 1;
+  string sku_code = 2;
+  string name = 3;
+  string description = 4;
+  float price = 5;
+  int64 stock = 6;
+  float discount = 7;
+  ProductStatusProto product_status = 8;
+  repeated string image_urls = 9;
+  map<string, string> other_specific_attributes = 10;
+  string created_at = 11;
+  string updated_at = 12;
+}
+
+enum ProductStatusProto {
+  ACTIVE = 0;
+  INACTIVE = 1;
+  OUT_OF_STOCK = 2;
+}
+
+message CategoriesProto {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string sub_categories = 4; // List of subcategories
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+message SaveProductResponse {
+  bool success = 1; // Indicates whether the operation was successful
+  string message = 2; // A message describing the result
+  ProductProto product = 3; // Return the saved product
+}
+
+
+service ProductService {
+  rpc getProduct (ProductProto) returns (ProductProto);
+}
