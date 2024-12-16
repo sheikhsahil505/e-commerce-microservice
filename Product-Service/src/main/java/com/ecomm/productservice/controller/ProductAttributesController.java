@@ -37,4 +37,9 @@ public class ProductAttributesController {
     public ResponseEntity<ApiResponse<ProductAttributes>> updateProductAttributes(@RequestBody ProductAttributes productAttributes, @PathVariable Long productAttributeId) {
         return ResponseEntity.ok(productAttributesService.updateProductAttributes(productAttributes, productAttributeId));
     }
+
+    @PutMapping("/toggle/{id}")
+    public ResponseEntity<ApiResponse<ProductAttributes>> activateDeactivateProductAttributes(@PathVariable Long id) {
+        return ResponseEntity.ok(productAttributesService.activateDeactivateProductAttributes(id));
+    }
 }
