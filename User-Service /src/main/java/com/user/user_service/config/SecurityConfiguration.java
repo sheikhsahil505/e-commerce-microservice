@@ -44,7 +44,7 @@ public class SecurityConfiguration {
 
                     // Protect /users endpoint, allowing only users with ROLE_ADMIN
                     authorize.requestMatchers("/api/v1/user-service/admin/**").hasRole("ADMIN");
-                    authorize.requestMatchers("/api/v1/product-service/seller/**").hasRole("SELLER");
+                    authorize.requestMatchers("/api/v1/user-service/seller/**").hasRole("SELLER");
                     // For other endpoints, any authenticated user can access
 
                     authorize.anyRequest().authenticated();

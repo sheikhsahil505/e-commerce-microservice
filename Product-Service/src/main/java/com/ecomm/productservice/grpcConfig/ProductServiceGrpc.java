@@ -1,10 +1,11 @@
 package com.ecomm.productservice.grpcConfig;
 
-import com.devproblems.CategoriesProto;
-import com.devproblems.ProductAttributesProto;
-import com.devproblems.ProductProto;
-import com.devproblems.ProductStatusProto;
+import com.devproblems.*;
+import com.ecomm.productservice.model.Category;
 import com.ecomm.productservice.model.Product;
+import com.ecomm.productservice.model.ProductAttributes;
+import com.ecomm.productservice.repository.CategoryRepository;
+import com.ecomm.productservice.repository.ProductAttributesRepository;
 import com.ecomm.productservice.repository.ProductRepository;
 import io.grpc.stub.StreamObserver;
 import lombok.NoArgsConstructor;
@@ -21,10 +22,16 @@ import java.util.Optional;
 public class ProductServiceGrpc extends com.devproblems.ProductServiceGrpc.ProductServiceImplBase {
 
     private ProductRepository productRepository;
+    private ProductMapperGrpc productMapperGrpc;
+    private ProductAttributesRepository productAttributesRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductServiceGrpc(ProductRepository productRepository) {
+    public ProductServiceGrpc(ProductRepository productRepository, ProductMapperGrpc productMapperGrpc, ProductAttributesRepository productAttributesRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.productMapperGrpc = productMapperGrpc;
+        this.productAttributesRepository = productAttributesRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -79,6 +86,34 @@ public class ProductServiceGrpc extends com.devproblems.ProductServiceGrpc.Produ
         } else {
             responseObserver.onError(new Exception("Product not found"));
         }
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void saveProduct(ProductProto request, StreamObserver<SaveProductResponse> responseObserver) {
+        Product product = productMapperGrpc.mapToProductEntity(request);
+
+        Product save = productRepository.save(product);
+        SaveProductResponse saveProductResponse = SaveProductResponse.newBuilder()
+                .setSuccess(true)
+                .setMessage("Product save successfully")
+                .setProduct(productMapperGrpc.mapToProductProto(save)).build();
+
+        responseObserver.onNext(saveProductResponse);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void findMyProducts(FindMyProductsRequest request, StreamObserver<FindMyProductsResponse> responseObserver) {
+        List<Product> bySellerId = productRepository.findBySellerId(request.getSellerId());
+        List<ProductProto> productProtoList = new ArrayList<>();
+        for (Product product : bySellerId) {
+            ProductProto productProto = productMapperGrpc.mapToProductProto(product);
+            productProtoList.add(productProto);
+        }
+        FindMyProductsResponse findMyProductsResponse = FindMyProductsResponse.newBuilder()
+                .addAllProducts(productProtoList).build();
+        responseObserver.onNext(findMyProductsResponse);
         responseObserver.onCompleted();
     }
 }

@@ -14,7 +14,7 @@ public class ProductDTO {
     private String updatedAt;
     private List<ProductAttributesDTO> productAttributes;
     private List<CategoryDTO> categories;
-    private Long sellerId;
+    private String sellerId;
 
     // Getters and Setters
     @Data
@@ -26,11 +26,12 @@ public class ProductDTO {
         private Float price;
         private Long stock;
         private Float discount;
-        private String productStatus;
+        private ProductStatusEnum productStatus;
         private List<String> imageUrls;
         private Map<String, String> otherSpecificAttributes;
         private String createdAt;
         private String updatedAt;
+        private Long sellerId;
     }
 
     @Data
@@ -41,5 +42,8 @@ public class ProductDTO {
         private List<String> subCategories;
         private String createdAt;
         private String updatedAt;
+    }
+    enum ProductStatusEnum {
+        ACTIVE, INACTIVE, OUT_OF_STOCK
     }
 }

@@ -42,7 +42,7 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, orphanRemoval = true,fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ProductAttributes> productAttributes;
 
@@ -54,5 +54,5 @@ public class Product {
     )
     private List<Category> categories;
 
-    private long sellerId;
+    private String sellerId;
 }

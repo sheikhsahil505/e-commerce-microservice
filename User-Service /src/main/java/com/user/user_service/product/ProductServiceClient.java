@@ -1,30 +1,26 @@
 package com.user.user_service.product;
 
-import com.devproblems.Product;
-import com.devproblems.ProductAttributesProto;
-import com.devproblems.ProductProto;
-import com.devproblems.ProductServiceGrpc;
-import com.google.protobuf.Descriptors;
+import com.devproblems.*;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
-import lombok.AllArgsConstructor;
-import net.devh.boot.grpc.common.codec.GrpcCodec;
 import org.springframework.stereotype.Service;
-import net.devh.boot.grpc.client.inject.GrpcClient;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceClient {
 
+    private final ProductMapperGrpc productMapperGrpc;
+
+    public ProductServiceClient(ProductMapperGrpc productMapperGrpc) {
+        this.productMapperGrpc = productMapperGrpc;
+    }
+
     public ProductDTO getProducts(int id) {
         ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", 9000).usePlaintext().build();
         ProductServiceGrpc.ProductServiceBlockingStub stub = ProductServiceGrpc.newBlockingStub(channel);
-
         ProductProto productProto = ProductProto.newBuilder().setId(id).build();
         ProductProto product = stub.getProduct(productProto);
         channel.shutdown();
@@ -46,7 +42,7 @@ public class ProductServiceClient {
                     dto.setPrice(attr.getPrice());
                     dto.setStock(attr.getStock());
                     dto.setDiscount(attr.getDiscount());
-                    dto.setProductStatus(attr.getProductStatus().name());
+                    dto.setProductStatus(ProductDTO.ProductStatusEnum.valueOf(attr.getProductStatus().name()));
                     dto.setImageUrls(attr.getImageUrlsList());
                     dto.setOtherSpecificAttributes(attr.getOtherSpecificAttributesMap());
                     dto.setCreatedAt(attr.getCreatedAt());
@@ -72,5 +68,23 @@ public class ProductServiceClient {
         productDTO.setCategories(categoriesDTOs);
 
         return productDTO;
+    }
+
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", 9000).usePlaintext().build();
+        ProductServiceGrpc.ProductServiceBlockingStub stub = ProductServiceGrpc.newBlockingStub(channel);
+        SaveProductResponse saveProductResponse = stub.saveProduct(productMapperGrpc.mapToProductProto(productDTO));
+        return productMapperGrpc.mapToProductEntity(saveProductResponse.getProduct());
+    }
+
+    public List<ProductDTO> getProductsBySellerId(String sellerId) {
+        ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", 9000).usePlaintext().build();
+        ProductServiceGrpc.ProductServiceBlockingStub stub = ProductServiceGrpc.newBlockingStub(channel);
+        FindMyProductsResponse myProducts = stub.findMyProducts(FindMyProductsRequest.newBuilder().setSellerId(sellerId).build());
+        List<ProductDTO> result = new ArrayList<>();
+        for (ProductProto productProto : myProducts.getProductsList()) {
+            result.add(productMapperGrpc.mapToProductEntity(productProto));
+        }
+        return result;
     }
 }

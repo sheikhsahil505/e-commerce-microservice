@@ -13,7 +13,7 @@ message ProductProto {
   string updated_at = 5;
   repeated ProductAttributesProto product_attributes = 6;
   repeated CategoriesProto categories = 7;
-  int64 seller_id = 8;
+  string seller_id = 8;
 }
 
 message ProductAttributesProto {
@@ -52,7 +52,14 @@ message SaveProductResponse {
   ProductProto product = 3; // Return the saved product
 }
 
-
+message FindMyProductsRequest {
+  string seller_id=1;
+}
+message FindMyProductsResponse {
+  repeated ProductProto products = 1;
+}
 service ProductService {
   rpc getProduct (ProductProto) returns (ProductProto);
+  rpc saveProduct(ProductProto) returns (SaveProductResponse);
+  rpc findMyProducts(FindMyProductsRequest) returns (FindMyProductsResponse);
 }
