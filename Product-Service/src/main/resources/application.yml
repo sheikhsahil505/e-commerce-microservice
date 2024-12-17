@@ -4,7 +4,7 @@ spring:
   datasource:
     url: ${DB_CONNECTION_URL:jdbc:mysql://localhost:3306/product_service_db}
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:Sql@4321}
+    password: ${DB_PASSWORD:Root@123}
   jpa:
     show-sql: false
     hibernate:
@@ -18,12 +18,12 @@ spring:
         enabled: true
 server:
   port: ${PORT:8081}
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
-#  instance:
-#    prefer-ip-address: true
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
 springdoc:
   swagger-ui:
     enabled: true

@@ -1,6 +1,7 @@
 package com.user.user_service.product;
 
 import com.devproblems.ProductServiceGrpc;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Descriptors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class ProductController {
     }
 
         @GetMapping("/products/{id}")
-        public Map<Descriptors.FieldDescriptor, Object> getProduct(@PathVariable int id) {
+        public ProductDTO getProduct(@PathVariable int id) {
         return productService.getProducts(id);
     }
 

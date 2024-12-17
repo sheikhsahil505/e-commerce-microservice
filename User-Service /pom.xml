@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.user</groupId>
-	<artifactId>User-Service </artifactId>
+	<artifactId>User-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>User-Service </name>
+	<name>User-Service</name>
 	<description>User service auth </description>
 	<url/>
 	<licenses>
@@ -31,10 +31,10 @@
 		<spring-cloud.version>2024.0.0-RC1</spring-cloud.version>
 	</properties>
 	<dependencies>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -94,21 +94,11 @@
 			<artifactId>Grpc-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/net.devh/grpc-client-spring-boot-starter -->
 		<dependency>
 			<groupId>net.devh</groupId>
 			<artifactId>grpc-client-spring-boot-starter</artifactId>
 			<version>2.12.0.RELEASE</version>
 		</dependency>
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/net.devh/grpc-client-spring-boot-starter &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>net.devh</groupId>-->
-<!--			<artifactId>grpc-client-spring-boot-starter</artifactId>-->
-<!--			<version>3.1.0.RELEASE</version>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
-
-
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -1,6 +1,7 @@
 package com.ecomm.productservice.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -61,12 +62,12 @@ public class ProductAttributes {
     @NotNull(message = "Please define product status.")
     private ProductStatus productStatus;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(length = 16300)
     @NotNull(message = "Please upload some product images.")
     private List<String> imageUrls;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @NotNull(message = "Please add product specific attributes.")
     private Map<String, String> otherSpecificAttributes;
 
